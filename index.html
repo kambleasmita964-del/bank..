@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NovaBank - Banking Application</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #f3f5fb;
+    color: #202944;
+}
+
+header {
+    background: linear-gradient(135deg, #172554, #4338ca);
+    color: white;
+    padding: 25px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+header h1 {
+    font-size: 28px;
+}
+
+header p {
+    margin-top: 7px;
+    color: #dbeafe;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+.welcome {
+    margin-bottom: 25px;
+}
+
+.welcome h2 {
+    margin-bottom: 8px;
+}
+
+.balance-card {
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    color: white;
+    padding: 30px;
+    border-radius: 18px;
+    margin-bottom: 25px;
+    box-shadow: 0 8px 25px #c7c9f5;
+}
+
+.balance-card p {
+    color: #e0e7ff;
+    margin-bottom: 12px;
+}
+
+.balance-card h2 {
+    font-size: 36px;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 18px;
+    margin-bottom: 25px;
+}
+
+.stat {
+    background: white;
+    padding: 22px;
+    border-radius: 14px;
+    box-shadow: 0 3px 12px #e5e7eb;
+}
+
+.stat p {
+    color: #64748b;
+    margin-bottom: 12px;
+}
+
+.stat h3 {
+    font-size: 23px;
+}
+
+.layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 3px 12px #e5e7eb;
+    margin-bottom: 22px;
+}
+
+.card h3 {
+    margin-bottom: 20px;
+    color: #312e81;
+}
+
+input, select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    margin-bottom: 13px;
+    font-size: 15px;
+}
+
+button {
+    background: #4f46e5;
+    color: white;
+    padding: 12px 18px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15px;
+    transition: 0.2s;
+}
+
+button:hover {
+    background: #3730a3;
+}
+
+.full {
+    width: 100%;
+}
+
+.danger {
+    background: #dc2626;
+}
+
+.danger:hover {
+    background: #b91c1c;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 13px 8px;
+    border-bottom: 1px solid #e5e7eb;
+    text-align: left;
+    font-size: 14px;
+}
+
+th {
+    color: #64748b;
+}
+
+.income {
+    color: #16a34a;
+    font-weight: bold;
+}
+
+.expense {
+    color: #dc2626;
+    font-weight: bold;
+}
+
+.table-wrap {
+    overflow-x: auto;
+}
+
+.message {
+    margin-bottom: 15px;
+    padding: 12px;
+    border-radius: 8px;
+    display: none;
+}
+
+footer {
+    text-align: center;
+    color: #64748b;
+    padding: 25px;
+}
+
+@media (max-width: 700px) {
+    .layout {
+        grid-template-columns: 1fr;
+    }
+
+    header {
+        padding: 22px;
+    }
+
+    .balance-card h2 {
+        font-size: 29px;
+    }
+
+    .card {
+        padding: 18px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div>
+        <h1>🏦 NovaBank</h1>
+        <p>Your Money, Your Future</p>
+    </div>
+    <div>💳 Digital Banking Dashboard</div>
+</header>
+
+<div class="container">
+
+    <div class="welcome">
+        <h2>Welcome to NovaBank 👋</h2>
+        <p>Manage your demo account and transactions easily.</p>
+    </div>
+
+    <div class="balance-card">
+        <p>Available Account Balance</p>
+        <h2 id="balance">₹ 25,000.00</h2>
+        <p style="margin-top:15px;">Account Number: <span id="accountNo">NB100245</span></p>
+    </div>
+
+    <div class="stats">
+        <div class="stat">
+            <p>💰 Total Deposits</p>
+            <h3 id="totalDeposits">₹25,000</h3>
+        </div>
+
+        <div class="stat">
+            <p>📤 Total Withdrawals</p>
+            <h3 id="totalWithdrawals">₹0</h3>
+        </div>
+
+        <div class="stat">
+            <p>🔄 Total Transactions</p>
+            <h3 id="totalTransactions">0</h3>
+        </div>
+    </div>
+
+    <div class="layout">
+
+        <div>
+            <div class="card">
+                <h3>👤 Create Demo Account</h3>
+                <div id="accountMessage" class="message"></div>
+
+                <input type="text" id="customerName"
+                       placeholder="Enter customer name">
+
+                <button class="full" onclick="createAccount()">
+                    Create Account
+                </button>
+            </div>
+
+            <div class="card">
+                <h3>➕ Deposit Money</h3>
+                <div id="depositMessage" class="message"></div>
+
+                <input type="number" id="depositAmount"
+                       placeholder="Enter amount (₹)" min="1">
+
+                <button class="full" onclick="depositMoney()">
+                    Deposit Money
+                </button>
+            </div>
+
+            <div class="card">
+                <h3>➖ Withdraw Money</h3>
+                <div id="withdrawMessage" class="message"></div>
+
+                <input type="number" id="withdrawAmount"
+                       placeholder="Enter amount (₹)" min="1">
+
+                <button class="full danger" onclick="withdrawMoney()">
+                    Withdraw Money
+                </button>
+            </div>
+        </div>
+
+        <div>
+            <div class="card">
+                <h3>🔄 Transfer Money</h3>
+                <div id="transferMessage" class="message"></div>
+
+                <input type="text" id="receiverAccount"
+                       placeholder="Receiver account number">
+
+                <input type="number" id="transferAmount"
+                       placeholder="Enter amount (₹)" min="1">
+
+                <button class="full" onclick="transferMoney()">
+                    Transfer Money
+                </button>
+            </div>
+
+            <div class="card">
+                <h3>📋 Recent Transactions</h3>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Amount</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="transactionList">
+                            <tr>
+                                <td colspan="3">No transactions yet.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<footer>
+    <p>© 2026 NovaBank | Banking Application Mini Project</p>
+    <p style="margin-top:6px;">Educational demo only — no real banking services.</p>
+</footer>
+
+<script>
+let balance = 25000;
+let totalDeposits = 25000;
+let totalWithdrawals = 0;
+let transactionCount = 0;
+let accountNumber = "NB100245";
+let transactions = [];
+
+function formatMoney(amount) {
+    return "₹" + amount.toLocaleString("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    });
+}
+
+function showMessage(id, message, success) {
+    const box = document.getElementById(id);
+    box.textContent = message;
+    box.style.display = "block";
+    box.style.background = success ? "#dcfce7" : "#fee2e2";
+    box.style.color = success ? "#166534" : "#991b1b";
+}
+
+function updateDashboard() {
+    document.getElementById("balance").textContent =
+        formatMoney(balance);
+
+    document.getElementById("totalDeposits").textContent =
+        formatMoney(totalDeposits);
+
+    document.getElementById("totalWithdrawals").textContent =
+        formatMoney(totalWithdrawals);
+
+    document.getElementById("totalTransactions").textContent =
+        transactionCount;
+
+    document.getElementById("accountNo").textContent =
+        accountNumber;
+
+    const list = document.getElementById("transactionList");
+
+    if (transactions.length === 0) {
+        list.innerHTML =
+            '<tr><td colspan="3">No transactions yet.</td></tr>';
+        return;
+    }
+
+    list.innerHTML = transactions.map(t => `
+        <tr>
+            <td>${escapeHTML(t.type)}</td>
+            <td class="${t.amount >= 0 ? "income" : "expense"}">
+                ${t.amount >= 0 ? "+" : "-"}${formatMoney(Math.abs(t.amount))}
+            </td>
+            <td>${escapeHTML(t.date)}</td>
+        </tr>
+    `).join("");
+}
+
+function escapeHTML(value) {
+    return String(value).replace(/[&<>"']/g, function(char) {
+        return {
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#39;"
+        }[char];
+    });
+}
+
+function addTransaction(type, amount) {
+    transactions.unshift({
+        type: type,
+        amount: amount,
+        date: new Date().toLocaleDateString("en-IN")
+    });
+
+    transactionCount++;
+    updateDashboard();
+}
+
+function getAmount(id) {
+    const input = document.getElementById(id);
+    const amount = Number(input.value);
+
+    if (input.value.trim() === "" ||
+        !Number.isFinite(amount) ||
+        amount <= 0) {
+        return null;
+    }
+
+    return amount;
+}
+
+function createAccount() {
+    const name = document.getElementById("customerName").value.trim();
+
+    if (!name) {
+        showMessage("accountMessage",
+            "Please enter the customer name.", false);
+        return;
+    }
+
+    accountNumber = "NB" + Math.floor(100000 + Math.random() * 900000);
+
+    showMessage("accountMessage",
+        "Demo account created successfully for " + name +
+        ". Account No: " + accountNumber, true);
+
+    updateDashboard();
+}
+
+function depositMoney() {
+    const amount = getAmount("depositAmount");
+
+    if (amount === null) {
+        showMessage("depositMessage",
+            "Please enter a valid amount.", false);
+        return;
+    }
+
+    balance += amount;
+    totalDeposits += amount;
+
+    addTransaction("Deposit", amount);
+
+    document.getElementById("depositAmount").value = "";
+
+    showMessage("depositMessage",
+        "Deposit successful! " + formatMoney(amount) +
+        " added to your demo balance.", true);
+}
+
+function withdrawMoney() {
+    const amount = getAmount("withdrawAmount");
+
+    if (amount === null) {
+        showMessage("withdrawMessage",
+            "Please enter a valid amount.", false);
+        return;
+    }
+
+    if (amount > balance) {
+        showMessage("withdrawMessage",
+            "Insufficient balance!", false);
+        return;
+    }
+
+    balance -= amount;
+    totalWithdrawals += amount;
+
+    addTransaction("Withdrawal", -amount);
+
+    document.getElementById("withdrawAmount").value = "";
+
+    showMessage("withdrawMessage",
+        "Withdrawal successful! " + formatMoney(amount) +
+        " deducted from your demo balance.", true);
+}
+
+function transferMoney() {
+    const receiver = document.getElementById("receiverAccount").value.trim();
+    const amount = getAmount("transferAmount");
+
+    if (!receiver || amount === null) {
+        showMessage("transferMessage",
+            "Enter a receiver account number and a valid amount.", false);
+        return;
+    }
+
+    if (receiver === accountNumber) {
+        showMessage("transferMessage",
+            "You cannot transfer money to the same account.", false);
+        return;
+    }
+
+    if (amount > balance) {
+        showMessage("transferMessage",
+            "Insufficient balance!", false);
+        return;
+    }
+
+    balance -= amount;
+    totalWithdrawals += amount;
+
+    addTransaction("Transfer to " + receiver, -amount);
+
+    document.getElementById("transferAmount").value = "";
+    document.getElementById("receiverAccount").value = "";
+
+    showMessage("transferMessage",
+        "Demo transfer recorded successfully: " +
+        formatMoney(amount) + " to " + receiver + ".", true);
+}
+
+updateDashboard();
+</script>
+
+</body>
+</html>
